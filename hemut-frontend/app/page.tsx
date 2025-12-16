@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import QuestionCard from "../components/QuestionCard";
 import Navbar from "../components/Navbar";
+import { sortQuestions } from "@/lib/sort";
 
 export default function Home() {
   const [questions, setQuestions] = useState<any[]>([]);
@@ -21,27 +22,29 @@ export default function Home() {
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      console.log("WebSocket message received:", data);
-
       switch (data.event) {
         case "new_question":
-          setQuestions((prev) => [data.question, ...prev]);
+          setQuestions((prev) => sortQuestions([data.payload, ...prev]));
           break;
         case "marked_answered":
           setQuestions((prev) =>
-            prev.map((q) =>
-              q.question_id === data?.question_id
-                ? { ...q, status: "ANSWERED" }
-                : q
+            sortQuestions(
+              prev.map((q) =>
+                q.question_id === data.question_id
+                  ? { ...q, status: "ANSWERED" }
+                  : q
+              )
             )
           );
           break;
         case "marked_escalated":
           setQuestions((prev) =>
-            prev.map((q) =>
-              q.question_id === data?.question_id
-                ? { ...q, status: "ESCALATED" }
-                : q
+            sortQuestions(
+              prev.map((q) =>
+                q.question_id === data.question_id
+                  ? { ...q, status: "ESCALATED" }
+                  : q
+              )
             )
           );
           break;
