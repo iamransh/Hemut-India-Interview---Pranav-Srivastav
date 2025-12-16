@@ -14,3 +14,9 @@ To Run Backend:
     - docker compose up --build
 
 \*\*Backend require env variables from .env file the structure of which can be found in .env.example file in the hemut-backend folder.
+
+To register an admin on the backend:
+
+    - go to /login page and click on register. The data is already hardcoded on the backend.
+
+\*\*To login with admin cred use the default values provided on the /login page.
